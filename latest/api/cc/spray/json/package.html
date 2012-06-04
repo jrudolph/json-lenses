@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>cc.spray.json</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../lib/template.css" />
+      <script type="text/javascript" src="../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../lib/package_big.png" />
+        <p id="owner"><a name="cc" class="extype" href="../../package.html">cc</a>.<a name="cc.spray" class="extype" href="../package.html">spray</a></p>
+        <h1>json</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="kind">package</span>
+      <span class="symbol"> 
+        <span class="name">json</span>
+        
+        
+      </span>
+      </h4>
+      
+          <div class="fullcommenttop" id="comment"></div>
+        
+
+      <div id="template">
+
+        <div id="mbrsel">
+          <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+          
+          
+          <div id="visbl">
+              <span class="filtertype">Visibility</span>
+              <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+            </div>
+        </div>
+
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="cc.spray.json.package#JsField" data-isabs="false">
+      <a id="JsField:()"></a>
+      <h4 class="signature">
+      <span class="kind">type</span>
+      <span class="symbol"> 
+        <span class="name">JsField</span>
+        
+        <span class="result"> = (String, <span name="cc.spray.json.JsValue" class="extype">JsValue</span>)</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li></ol>
+            </div>
+        
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="cc.spray.json.package#deserializationError" data-isabs="false">
+      <a id="deserializationError(String,Throwable):Nothing"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">deserializationError</span>
+        
+        <span class="params">(<span name="msg">msg: String</span>, <span name="cause">cause: Throwable</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li><li visbl="pub" name="cc.spray.json.package#jsonReader" data-isabs="false">
+      <a id="jsonReader[T](JsonReader[T]):JsonReader[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">jsonReader</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="reader">reader: <span name="cc.spray.json.JsonReader" class="extype">JsonReader</span>[T]</span>)</span><span class="result">: <span name="cc.spray.json.JsonReader" class="extype">JsonReader</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li><li visbl="pub" name="cc.spray.json.package#jsonWriter" data-isabs="false">
+      <a id="jsonWriter[T](JsonWriter[T]):JsonWriter[T]"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">jsonWriter</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span class="implicit">implicit </span><span name="writer">writer: <span name="cc.spray.json.JsonWriter" class="extype">JsonWriter</span>[T]</span>)</span><span class="result">: <span name="cc.spray.json.JsonWriter" class="extype">JsonWriter</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li><li visbl="pub" name="cc.spray.json.lenses" data-isabs="false">
+      <a id="lenses:lenses"></a>
+      <h4 class="signature">
+      <span class="kind">package</span>
+      <span class="symbol"> 
+        <a href="lenses/package.html"><span class="name">lenses</span></a>
+        
+        
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="cc.spray.json.package#pimpAny" data-isabs="false">
+      <a id="pimpAny[T](T):PimpedAny[T]"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">pimpAny</span>
+        <span class="tparams">[<span name="T">T</span>]</span>
+        <span class="params">(<span name="any">any: T</span>)</span><span class="result">: <span name="cc.spray.json.PimpedAny" class="extype">PimpedAny</span>[T]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li><li visbl="pub" name="cc.spray.json.package#pimpString" data-isabs="false">
+      <a id="pimpString(String):PimpedString"></a>
+      <h4 class="signature">
+      <span class="kind">implicit def</span>
+      <span class="symbol"> 
+        <span class="name">pimpString</span>
+        
+        <span class="params">(<span name="string">string: String</span>)</span><span class="result">: <span name="cc.spray.json.PimpedString" class="extype">PimpedString</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>implicit </dd><dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li><li visbl="pub" name="cc.spray.json.package#serializationError" data-isabs="false">
+      <a id="serializationError(String):Nothing"></a>
+      <h4 class="signature">
+      <span class="kind">def</span>
+      <span class="symbol"> 
+        <span class="name">serializationError</span>
+        
+        <span class="params">(<span name="msg">msg: String</span>)</span><span class="result">: <span name="scala.Nothing" class="extype">Nothing</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>package</dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        
+
+      </div>
+      
+      <div id="tooltip"></div>
+      
+    </body>
+      </html>
