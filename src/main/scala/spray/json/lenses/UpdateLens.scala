@@ -32,8 +32,10 @@ trait GeneralUpdateLens[P, T] {
    * `updated` returns `Left(error)` if the update operation or any of any intermediate
    * lens fails.
    */
-  def updated(f: GeneralOperation)(parent: P): Validated[JsValue]
+  def updated(f: GeneralOperation)(parent: P): Validated[P]
 
-  def !(op: GeneralOperation): GeneralUpdate[T]
+  def !(op: GeneralOperation): GeneralUpdate[P] = new GeneralUpdate[P] {
+    def apply(parent: P): P = updated(op)(parent).getOrThrow
+  }
 }
 

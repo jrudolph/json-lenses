@@ -32,11 +32,6 @@ abstract class LensImpl[M[_]](implicit val ops: Ops[M]) extends Lens[M] { outer 
   def get[T: Reader](p: JsValue): M[T] =
     tryGet[T](p).getOrThrow
 
-  def !(op: Operation): Update = new Update {
-    def apply(parent: JsValue): JsValue =
-      updated(op)(parent).getOrThrow
-  }
-
   def is[U: Reader](f: U => Boolean): JsPred = value =>
     tryGet[U](value) exists (x => ops.map(x)(f).forall(identity))
 
