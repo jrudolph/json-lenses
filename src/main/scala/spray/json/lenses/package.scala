@@ -12,6 +12,8 @@ package object lenses {
   type OptLens = Lens[Option]
   type SeqLens = Lens[Seq]
 
+  type UpdateLens = GeneralUpdateLens[JsValue, JsValue]
+
   def ??? = sys.error("NYI")
   def unexpected(message: String) = Left(new RuntimeException(message))
   def outOfBounds(message: String) = Left(new IndexOutOfBoundsException(message))

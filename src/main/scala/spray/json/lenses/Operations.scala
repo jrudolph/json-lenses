@@ -31,9 +31,9 @@ trait Operations extends OptionalFieldOperations { _: ExtraImplicits =>
       value.as[T] map (v => f(v).toJson)
   }
 
-  def append(update: Update): Operation = ???
-  def update(update: Update): Operation = ???
-  def extract[M[_], T](value: Lens[M])(f: M[T] => Update): Operation = ???
+  def append(update: GeneralUpdate[JsValue]): Operation = ???
+  def update(update: GeneralUpdate[JsValue]): Operation = ???
+  def extract[M[_], T](value: Lens[M])(f: M[T] => GeneralUpdate[JsValue]): Operation = ???
 }
 
 object Operations extends Operations with ExtraImplicits

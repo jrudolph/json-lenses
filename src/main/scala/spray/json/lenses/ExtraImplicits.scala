@@ -5,9 +5,9 @@ trait ExtraImplicits {
   trait RichJsValue {
     def value: JsValue
 
-    def update(updater: Update): JsValue = updater(value)
+    def update(updater: GeneralUpdate[JsValue]): JsValue = updater(value)
 
-    def update[T: JsonWriter, M[_]](lens: UpdateLens, pValue: T): JsValue =
+    def update[T: JsonWriter, M[_]](lens: GeneralUpdateLens[JsValue, JsValue], pValue: T): JsValue =
       lens ! Operations.set(pValue) apply value
 
     // This can't be simplified because we don't want the type constructor
