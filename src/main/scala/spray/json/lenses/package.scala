@@ -55,4 +55,22 @@ package object lenses {
   }
 
   implicit def validateOption[T](o: Option[T]): ValidateOption[T] = ValidateOption(o)
+
+  implicit def addExtraReadLensMethodsToString(fieldName: String): ExtraReadLensMethods[Id] = addExtraReadLensMethods(JsonLenses.strToField(fieldName))
+  implicit def addExtraReadLensMethods[M[_]](lens: Lens[M]): ExtraReadLensMethods[M] = new ExtraReadLensMethods[M] {
+    import ExtraImplicits.richValue
+    import lens.{ ops, retr }
+
+    def tryGet[T: Reader](p: JsValue): Validated[M[T]] =
+      retr(p).flatMap(mapValue(_)(_.as[T]))
+
+    def get[T: Reader](p: JsValue): M[T] =
+      tryGet[T](p).getOrThrow
+
+    def is[U: Reader](f: U => Boolean): JsPred = value =>
+      tryGet[U](value) exists (x => ops.map(x)(f).forall(identity))
+
+    private[this] def mapValue[T](value: M[JsValue])(f: JsValue => Validated[T]): Validated[M[T]] =
+      ops.allRight(ops.map(value)(f))
+  }
 }

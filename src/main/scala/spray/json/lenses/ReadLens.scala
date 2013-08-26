@@ -7,13 +7,17 @@ package lenses
  * values but also sequences or optional values.
  * @tparam M
  */
-trait ReadLens[M[_]] {
+trait GeneralReadLens[M[_], P, T] {
   /**
    * Given a parent JsValue, tries to extract the child value.
    * @return `Right(value)` if the lens read succeeds. `Left(error)` if the lens read fails.
    */
-  def retr: JsValue => Validated[M[JsValue]]
+  def retr: P => Validated[M[T]]
+}
 
+trait ReadLens[M[_]] extends GeneralReadLens[M, JsValue, JsValue]
+
+trait ExtraReadLensMethods[M[_]] {
   /**
    * Given a parent JsValue extracts and tries to convert the JsValue into
    * a value of type `T`
