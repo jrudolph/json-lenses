@@ -12,6 +12,9 @@ package object lenses {
   type OptLens = Lens[Option]
   type SeqLens = Lens[Seq]
 
+  type Lens[M[_]] = GeneralLens[M, JsValue, JsValue]
+  type LensImpl[M[_]] = GeneralLensImpl[M, JsValue, JsValue]
+  type ReadLens[M[_]] = GeneralReadLens[M, JsValue, JsValue]
   type UpdateLens = GeneralUpdateLens[JsValue, JsValue]
 
   def ??? = sys.error("NYI")

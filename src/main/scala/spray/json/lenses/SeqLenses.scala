@@ -6,12 +6,13 @@ trait SeqLenses {
    * The lens which just converts another Lens into one of a
    * Seq value.
    */
-  val asSeq: SeqLens = new LensImpl[Seq] {
-    def updated(f: Operation)(parent: JsValue): SafeJsValue =
+  val _asSeq = new GeneralLensImpl[Seq, AnyRef, AnyRef] {
+    def updated(f: GeneralOperation)(parent: AnyRef): Validated[AnyRef] =
       f(Right(parent))
 
-    def retr: JsValue => Validated[Seq[JsValue]] = x => Right(Seq(x))
+    def retr: AnyRef => Validated[Seq[AnyRef]] = x => Right(Seq(x))
   }
+  def asSeq[P, T]: GeneralLens[Seq, P, T] = _asSeq.asInstanceOf[GeneralLens[Seq, P, T]]
 
   /**
    * All the elements of a JsArray.

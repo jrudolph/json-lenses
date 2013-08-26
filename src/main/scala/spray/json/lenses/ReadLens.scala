@@ -15,8 +15,6 @@ trait GeneralReadLens[M[_], P, T] {
   def retr: P => Validated[M[T]]
 }
 
-trait ReadLens[M[_]] extends GeneralReadLens[M, JsValue, JsValue]
-
 trait ExtraReadLensMethods[M[_]] {
   /**
    * Given a parent JsValue extracts and tries to convert the JsValue into

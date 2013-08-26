@@ -8,13 +8,13 @@ package lenses
  * A lens can either operate on a scalar value, or on an optional value, or on a
  * sequence value. This is denoted by the `M[_]` type constructor.
  */
-trait Lens[M[_]] extends UpdateLens with ReadLens[M] {
+trait GeneralLens[M[_], P, T] extends GeneralUpdateLens[P, T] with GeneralReadLens[M, P, T] {
   /**
    * A shortcut for the `combine` lens which combines two lenses.
    */
-  def /[M2[_], R[_]](next: Lens[M2])(implicit ev: Join[M2, M, R]): Lens[R]
+  def /[M2[_], R[_], T2](next: GeneralLens[M2, T, T2])(implicit ev: Join[M2, M, R]): GeneralLens[R, P, T2]
 
-  def toSeq: Lens[Seq]
+  def toSeq: GeneralLens[Seq, P, T]
 
   def ops: Ops[M]
 }
@@ -23,23 +23,9 @@ trait Lens[M[_]] extends UpdateLens with ReadLens[M] {
  * This implements most of the methods of `Lens`. Implementors of a new type of lens
  * must implement `retr` for the read side of the lens and `updated` for the update side of the lens.
  */
-abstract class LensImpl[M[_]](implicit val ops: Ops[M]) extends Lens[M] { outer =>
-  import ExtraImplicits.richValue
-
-  def tryGet[T: Reader](p: JsValue): Validated[M[T]] =
-    retr(p).flatMap(mapValue(_)(_.as[T]))
-
-  def get[T: Reader](p: JsValue): M[T] =
-    tryGet[T](p).getOrThrow
-
-  def is[U: Reader](f: U => Boolean): JsPred = value =>
-    tryGet[U](value) exists (x => ops.map(x)(f).forall(identity))
-
-  def /[M2[_], R[_]](next: Lens[M2])(implicit ev: Join[M2, M, R]): Lens[R] =
+abstract class GeneralLensImpl[M[_], P, T](implicit val ops: Ops[M]) extends GeneralLens[M, P, T] { outer =>
+  def /[M2[_], R[_], T2](next: GeneralLens[M2, T, T2])(implicit ev: Join[M2, M, R]): GeneralLens[R, P, T2] =
     JsonLenses.combine(this, next)
 
-  def toSeq: Lens[Seq] = this / SeqLenses.asSeq
-
-  private[this] def mapValue[T](value: M[JsValue])(f: JsValue => Validated[T]): Validated[M[T]] =
-    ops.allRight(ops.map(value)(f))
+  def toSeq: GeneralLens[Seq, P, T] = this / SeqLenses.asSeq
 }

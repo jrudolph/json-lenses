@@ -25,15 +25,15 @@ object JsonLenses extends
   /**
    * The lens which combines an outer lens with an inner.
    */
-  def combine[M[_], M2[_], R[_]](outer: Lens[M], inner: Lens[M2])(implicit ev: Join[M2, M, R]): Lens[R] =
-    new LensImpl[R]()(ev.get(inner.ops, outer.ops)) {
-      def retr: JsValue => Validated[R[JsValue]] = parent =>
+  def combine[M[_], M2[_], R[_], T1, T2, T3](outer: GeneralLens[M, T1, T2], inner: GeneralLens[M2, T2, T3])(implicit ev: Join[M2, M, R]): GeneralLens[R, T1, T3] =
+    new GeneralLensImpl[R, T1, T3]()(ev.get(inner.ops, outer.ops)) {
+      def retr: T1 => Validated[R[T3]] = parent =>
         for {
           outerV <- outer.retr(parent)
           innerV <- ops.allRight(outer.ops.flatMap(outerV)(x => inner.ops.toSeq(inner.retr(x))))
         } yield innerV
 
-      def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue =
+      def updated(f: GeneralOperation)(parent: T1): Validated[T1] =
         outer.updated(_.flatMap(inner.updated(f)))(parent)
     }
 }
