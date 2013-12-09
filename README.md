@@ -13,7 +13,7 @@ It has the following features
 
 If you use SBT you can include _json-lenses_ in your project with
 
-    "net.virtual-void" %%  "json-lenses" % "0.5.3"
+    "net.virtual-void" %%  "json-lenses" % "0.5.4"
 
 ## Example
 
@@ -232,11 +232,6 @@ You can find the documentation for the _json-lenses_ API [here][scaladoc].
  * ...
 
 Please file an issue at the [issue tracker] if you need something.
-
-## Future
-
-It is planned that the json lenses will eventually move out of their incubator and
-will then be integrated into [spray-json] proper.
 
 ## Mailing list
 
