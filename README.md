@@ -13,7 +13,10 @@ It has the following features
 
 If you use SBT you can include _json-lenses_ in your project with
 
-    "net.virtual-void" %%  "json-lenses" % "0.5.4"
+    "net.virtual-void" %%  "json-lenses" % "0.6.0"
+
+(_json-lenses_ supports spray-json 1.3.x. For support of an older spray-json version use _json-lenses_ 0.5.4. See
+https://github.com/jrudolph/json-lenses/tree/v0.5.4-scala-2.11 for the old documentation).
 
 ## Example
 

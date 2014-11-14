@@ -1,0 +1,4 @@
+Version 0.6.0 is a maintainance release which fixes an incompatibility with spray-json 1.3.x [#14]. Support for
+Scala 2.9.x was dropped.
+
+[#14]: https://github.com/jrudolph/json-lenses/issues/14
