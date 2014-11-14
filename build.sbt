@@ -1,4 +1,4 @@
-scalaVersion := "2.11.0"
+scalaVersion := "2.11.4"
 
 resolvers += "spray" at "http://repo.spray.io"
 
@@ -8,7 +8,7 @@ libraryDependencies <++= scalaVersion { sv =>
     case _ => "2.3.11"
   }
   Seq(
-    "io.spray" %% "spray-json" % "1.2.6",
+    "io.spray" %% "spray-json" % "1.3.1",
     "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile",
     "org.specs2" %% "specs2" % specsVersion % "test")
 }
@@ -20,4 +20,4 @@ initialCommands in console += """
     import JsonLenses._
 """
 
-crossScalaVersions := Seq("2.9.3", "2.10.4", "2.11.0")
+crossScalaVersions := Seq("2.9.3", "2.10.4", "2.11.4")

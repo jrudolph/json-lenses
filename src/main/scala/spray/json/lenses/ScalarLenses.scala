@@ -28,8 +28,8 @@ trait ScalarLenses {
     def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue = parent match {
       case JsArray(elements) =>
         if (idx < elements.size) {
-          val (headEls, element :: tail) = elements.splitAt(idx)
-          f(Right(element)) map (v => JsArray(headEls ::: v :: tail))
+          val (headEls, element +: tail) = elements.splitAt(idx)
+          f(Right(element)) map (v => JsArray(headEls ++ (v +: tail)))
         } else
           unexpected("Too little elements in array: %s size: %d index: %d" format(parent, elements.size, idx))
       case e@_ =>

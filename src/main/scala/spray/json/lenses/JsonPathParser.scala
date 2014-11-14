@@ -1,6 +1,9 @@
 package spray.json
 package lenses
 
+import java.lang.StringBuilder
+
+import org.parboiled.Context
 import org.parboiled.scala._
 import org.parboiled.errors.{ErrorUtils, ParsingException}
 
@@ -8,7 +11,7 @@ import org.parboiled.errors.{ErrorUtils, ParsingException}
  * A parser for json-path expression as specified here:
  * [[http://goessner.net/articles/JsonPath/]]
  */
-object JsonPathParser extends Parser {
+object JsonPathParser extends Parser with BasicRules {
   def JsonPathExpr = rule { Path ~ EOI }
 
   def Path: Rule1[JsonPath.Path] = rule { Root ~ OptionalSelection }
@@ -34,9 +37,8 @@ object JsonPathParser extends Parser {
   def AllElements = rule { "*" ~ push(JsonPath.AllElements) }
   def ByFieldName = rule { FieldName ~~> JsonPath.ByField }
 
-  import JsonParser.WhiteSpace
   def BracketProjection: Rule1[JsonPath.Projection] = rule {
-    JsonParser.Digits ~> (d => JsonPath.ByIndex(d.toInt)) |
+    Digits ~> (d => JsonPath.ByIndex(d.toInt)) |
     SingleQuotedString ~~> JsonPath.ByField |
     AllElements |
     "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByPredicate
@@ -63,7 +65,7 @@ object JsonPathParser extends Parser {
     JsConstant ~~> JsonPath.Constant
   }
   def JsConstant: Rule1[JsValue] = rule {
-    JsonParser.JsonNumber |
+    JsonNumber |
     SingleQuotedString ~~> (JsString(_))
   }
 
@@ -73,7 +75,7 @@ object JsonPathParser extends Parser {
   }
 
   def SingleQuotedString: Rule1[String] =
-    rule { "'" ~ push(new java.lang.StringBuilder) ~ zeroOrMore(!anyOf("'") ~ ("\\" ~ JsonParser.EscapedChar | JsonParser.NormalChar)) } ~ "'" ~~> (_.toString)
+    rule { "'" ~ push(new java.lang.StringBuilder) ~ zeroOrMore(!anyOf("'") ~ ("\\" ~ EscapedChar | NormalChar)) } ~ "'" ~~> (_.toString)
 
   /**
    * The main parsing method. Uses a ReportingParseRunner (which only reports the first error) for simplicity.
@@ -88,5 +90,37 @@ object JsonPathParser extends Parser {
     parsingResult.result.getOrElse {
       throw new ParsingException("Invalid JSON source:\n" + ErrorUtils.printParseErrors(parsingResult))
     }
+  }
+}
+
+// a set of basic rules taken from the old spray-json parser
+// see https://github.com/spray/spray-json/blob/v1.2.6/src/main/scala/spray/json/JsonParser.scala
+trait BasicRules { _: Parser =>
+  def EscapedChar = rule (
+    anyOf("\"\\/") ~:% withContext(appendToSb(_)(_))
+      | "b" ~ appendToSb('\b')
+      | "f" ~ appendToSb('\f')
+      | "n" ~ appendToSb('\n')
+      | "r" ~ appendToSb('\r')
+      | "t" ~ appendToSb('\t')
+      | Unicode ~~% withContext((code, ctx) => appendToSb(code.asInstanceOf[Char])(ctx))
+  )
+
+  def NormalChar = rule { !anyOf("\"\\") ~ ANY ~:% (withContext(appendToSb(_)(_))) }
+  def Unicode = rule { "u" ~ group(HexDigit ~ HexDigit ~ HexDigit ~ HexDigit) ~> (java.lang.Integer.parseInt(_, 16)) }
+
+  def JsonNumber = rule { group(Integer ~ optional(Frac) ~ optional(Exp)) ~> (JsNumber(_)) ~ WhiteSpace }
+  def Frac = rule { "." ~ Digits }
+  def Exp = rule { ignoreCase("e") ~ optional(anyOf("+-")) ~ Digits }
+
+  def Integer = rule { optional("-") ~ (("1" - "9") ~ Digits | Digit) }
+  def Digits = rule { oneOrMore(Digit) }
+  def Digit = rule { "0" - "9" }
+  def HexDigit = rule { "0" - "9" | "a" - "f" | "A" - "F" }
+  def WhiteSpace: Rule0 = rule { zeroOrMore(anyOf(" \n\r\t\f")) }
+
+  def appendToSb(c: Char): Context[Any] => Unit = { ctx =>
+    ctx.getValueStack.peek.asInstanceOf[StringBuilder].append(c)
+    ()
   }
 }

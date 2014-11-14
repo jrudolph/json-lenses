@@ -9,8 +9,8 @@ trait OptionLenses {
     def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue = parent match {
       case JsArray(elements) =>
         elements.span(x => !pred(x)) match {
-          case (prefix, element :: suffix) =>
-            f(Right(element)) map (v => JsArray(prefix ::: v :: suffix))
+          case (prefix, element +: suffix) =>
+            f(Right(element)) map (v => JsArray(prefix ++ (v +: suffix)))
 
           // element not found, do nothing
           case _ =>
