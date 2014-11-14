@@ -5,7 +5,7 @@ import java.lang.StringBuilder
 
 import org.parboiled.Context
 import org.parboiled.scala._
-import org.parboiled.errors.{ErrorUtils, ParsingException}
+import org.parboiled.errors.{ ErrorUtils, ParsingException }
 
 /**
  * A parser for json-path expression as specified here:
@@ -21,14 +21,14 @@ object JsonPathParser extends Parser with BasicRules {
     anyOf("$@") ~ push(JsonPath.Root)
   }
 
-  def OptionalSelection : ReductionRule1[JsonPath.Path, JsonPath.Path] = rule {
+  def OptionalSelection: ReductionRule1[JsonPath.Path, JsonPath.Path] = rule {
     Projection ~~> JsonPath.Selection ~ OptionalSelection |
-    EMPTY ~~> identity
+      EMPTY ~~> identity
   }
 
   def Projection: Rule1[JsonPath.Projection] = rule {
-    "." ~ DotProjection          |
-    "[" ~ BracketProjection ~"]"
+    "." ~ DotProjection |
+      "[" ~ BracketProjection ~ "]"
   }
 
   def DotProjection: Rule1[JsonPath.Projection] = rule {
@@ -38,10 +38,10 @@ object JsonPathParser extends Parser with BasicRules {
   def ByFieldName = rule { FieldName ~~> JsonPath.ByField }
 
   def BracketProjection: Rule1[JsonPath.Projection] = rule {
-    Digits ~> (d => JsonPath.ByIndex(d.toInt)) |
-    SingleQuotedString ~~> JsonPath.ByField |
-    AllElements |
-    "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByPredicate
+    Digits ~> (d ⇒ JsonPath.ByIndex(d.toInt)) |
+      SingleQuotedString ~~> JsonPath.ByField |
+      AllElements |
+      "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByPredicate
   }
 
   def Predicate: Rule1[JsonPath.Predicate] = rule {
@@ -54,19 +54,19 @@ object JsonPathParser extends Parser with BasicRules {
     Path ~~> JsonPath.Exists
   }
 
-  def op[T](op: String)(cons: (JsonPath.Expr, JsonPath.SimpleExpr) => T) =
+  def op[T](op: String)(cons: (JsonPath.Expr, JsonPath.SimpleExpr) ⇒ T) =
     Expr ~ WhiteSpace ~ op ~ WhiteSpace ~ SimpleExpr ~~> cons
 
   def Expr: Rule1[JsonPath.Expr] = rule {
     Path ~~> JsonPath.PathExpr |
-    SimpleExpr
+      SimpleExpr
   }
   def SimpleExpr: Rule1[JsonPath.SimpleExpr] = rule {
     JsConstant ~~> JsonPath.Constant
   }
   def JsConstant: Rule1[JsValue] = rule {
     JsonNumber |
-    SingleQuotedString ~~> (JsString(_))
+      SingleQuotedString ~~> (JsString(_))
   }
 
   val WhiteSpaceChars = " \n\r\t\f"
@@ -95,16 +95,15 @@ object JsonPathParser extends Parser with BasicRules {
 
 // a set of basic rules taken from the old spray-json parser
 // see https://github.com/spray/spray-json/blob/v1.2.6/src/main/scala/spray/json/JsonParser.scala
-trait BasicRules { _: Parser =>
-  def EscapedChar = rule (
+trait BasicRules { _: Parser ⇒
+  def EscapedChar = rule(
     anyOf("\"\\/") ~:% withContext(appendToSb(_)(_))
       | "b" ~ appendToSb('\b')
       | "f" ~ appendToSb('\f')
       | "n" ~ appendToSb('\n')
       | "r" ~ appendToSb('\r')
       | "t" ~ appendToSb('\t')
-      | Unicode ~~% withContext((code, ctx) => appendToSb(code.asInstanceOf[Char])(ctx))
-  )
+      | Unicode ~~% withContext((code, ctx) ⇒ appendToSb(code.asInstanceOf[Char])(ctx)))
 
   def NormalChar = rule { !anyOf("\"\\") ~ ANY ~:% (withContext(appendToSb(_)(_))) }
   def Unicode = rule { "u" ~ group(HexDigit ~ HexDigit ~ HexDigit ~ HexDigit) ~> (java.lang.Integer.parseInt(_, 16)) }
@@ -119,7 +118,7 @@ trait BasicRules { _: Parser =>
   def HexDigit = rule { "0" - "9" | "a" - "f" | "A" - "F" }
   def WhiteSpace: Rule0 = rule { zeroOrMore(anyOf(" \n\r\t\f")) }
 
-  def appendToSb(c: Char): Context[Any] => Unit = { ctx =>
+  def appendToSb(c: Char): Context[Any] ⇒ Unit = { ctx ⇒
     ctx.getValueStack.peek.asInstanceOf[StringBuilder].append(c)
     ()
   }

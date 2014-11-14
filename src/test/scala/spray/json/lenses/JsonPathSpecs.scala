@@ -39,8 +39,7 @@ class JsonPathSpecs extends Specification {
 
       "by predicate: strings with spaces in conditions" in {
         parse("$[?(@.title=='The Space Merchants')]") must be_==(
-          Selection(Root, ByPredicate(Eq(PathExpr(Selection(Root, ByField("title"))), Constant(JsString("The Space Merchants")))))
-        )
+          Selection(Root, ByPredicate(Eq(PathExpr(Selection(Root, ByField("title"))), Constant(JsString("The Space Merchants"))))))
       }
     }
   }
