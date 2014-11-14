@@ -48,6 +48,7 @@ val json = """
 All authors in this document are addressed by
 ```scala
 import spray.json.lenses.JsonLenses._
+import spray.json.DefaultJsonProtocol._
 
 val allAuthors = 'store / 'book / * / 'author
 ```
