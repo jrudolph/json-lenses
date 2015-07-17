@@ -141,7 +141,7 @@ to see how this is done.
 
 #### Error handling
 
-To support proper error handling and recovery from errors (in some cases) failure is is always assumed as a
+To support proper error handling and recovery from errors (in some cases) failure is always assumed as a
 possible outcome. This is reflected by returning an `Either` value from almost all functions which may fail. The
 real declaration of the `Lens` type therefore looks more like this:
 
