@@ -60,16 +60,13 @@ object Ops {
       els.flatMap(f)
 
     def allRight[T](v: Seq[Validated[T]]): Validated[Seq[T]] = {
-      def inner(l: List[Validated[T]]): Validated[List[T]] = l match {
-        case head :: tail ⇒
+      v.foldLeft(Right(Nil): Validated[List[T]]) {
+        (acc, elem) ⇒
           for {
-            headM ← head
-            tailM ← inner(tail)
-          } yield headM :: tailM
-        case Nil ⇒
-          Right(Nil)
-      }
-      inner(v.toList)
+            xs ← acc
+            elemM ← elem
+          } yield elemM :: xs
+      }.map(_.reverse)
     }
 
     def toSeq[T](x: Validated[Seq[T]]): Seq[Validated[T]] = x match {
