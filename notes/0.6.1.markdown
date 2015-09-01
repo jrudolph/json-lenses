@@ -1,0 +1,7 @@
+Version 0.6.1 is a maintenance release. Fixed issues in this version:
+
+  - [#19][] fixed a StackOverflowException occurring while accessing big arrays
+  - updated dependencies
+
+[#19]: https://github.com/jrudolph/json-lenses/issues/19
+
