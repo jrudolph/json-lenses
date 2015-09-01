@@ -16,4 +16,4 @@ initialCommands in console += """
     import JsonLenses._
 """
 
-crossScalaVersions := Seq("2.10.4", "2.11.4")
+crossScalaVersions := Seq("2.10.5", "2.11.7")
