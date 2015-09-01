@@ -4,9 +4,10 @@ resolvers += "spray" at "http://repo.spray.io"
 
 libraryDependencies ++=
   Seq(
-    "io.spray" %% "spray-json" % "1.3.1",
+    "io.spray" %% "spray-json" % "1.3.2",
     "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile",
-    "org.specs2" %% "specs2-core" % "2.3.11" % "test")
+    "org.specs2" %% "specs2-core" % "3.6.4" % "test"
+  )
 
 initialCommands in console += """
     import spray.json._
