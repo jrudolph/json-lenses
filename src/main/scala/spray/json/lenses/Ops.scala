@@ -1,5 +1,8 @@
 package spray.json.lenses
 
+import scala.annotation.tailrec
+import scala.collection.immutable.VectorBuilder
+
 /**
  * A trait to define common operations for different container types.
  * There's some bias towards `Seq` because container types have to support
@@ -60,16 +63,15 @@ object Ops {
       els.flatMap(f)
 
     def allRight[T](v: Seq[Validated[T]]): Validated[Seq[T]] = {
-      def inner(l: List[Validated[T]]): Validated[List[T]] = l match {
-        case head :: tail ⇒
-          for {
-            headM ← head
-            tailM ← inner(tail)
-          } yield headM :: tailM
-        case Nil ⇒
-          Right(Nil)
-      }
-      inner(v.toList)
+      @tailrec def inner(l: Seq[Validated[T]], acc: VectorBuilder[T]): Validated[Seq[T]] =
+        l match {
+          case Right(head) +: tail ⇒
+            acc += head
+            inner(tail, acc)
+          case Left(e) +: _ ⇒ Left(e)
+          case Nil          ⇒ Right(acc.result())
+        }
+      inner(v, new VectorBuilder)
     }
 
     def toSeq[T](x: Validated[Seq[T]]): Seq[Validated[T]] = x match {

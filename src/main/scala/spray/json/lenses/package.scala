@@ -1,5 +1,7 @@
 package spray.json
 
+import scala.language.implicitConversions
+
 package object lenses {
   type JsPred = JsValue ⇒ Boolean
   type Id[T] = T
@@ -39,9 +41,8 @@ package object lenses {
   }
 
   def safe[T](body: ⇒ T): Validated[T] =
-    try {
-      Right(body)
-    } catch {
+    try Right(body)
+    catch {
       case e: Exception ⇒ Left(e)
     }
 

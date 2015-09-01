@@ -85,13 +85,20 @@ class JsonLensesSpec extends Specification with SpecHelpers {
           """[18, 23, 2, 5, 8, 3]""".extract[Int](*) must be_==(Seq(18, 23, 2, 5, 8, 3))
         }
         "which is a scalar element" in {
-          """{"a": [1, 2, 3, 4]}""".extract[Int](("a" / *)) must be_==(Seq(1, 2, 3, 4))
+          """{"a": [1, 2, 3, 4]}""".extract[Int]("a" / *) must be_==(Seq(1, 2, 3, 4))
         }
         "field of an array element" in {
-          """[{"a": 1}, {"a": 2}]""".extract[Int]((* / "a")) must be_==(Seq(1, 2))
+          """[{"a": 1}, {"a": 2}]""".extract[Int](* / "a") must be_==(Seq(1, 2))
         }
         "nested" in {
-          """[[1, 2], [3, 4]]""".extract[Int]((* / *)) must be_==(Seq(1, 2, 3, 4))
+          """[[1, 2], [3, 4]]""".extract[Int](* / *) must be_==(Seq(1, 2, 3, 4))
+        }
+        "if inner lens fails" in {
+          """[{"a": 1}, {"b": 2}]""".extract[Int](* / 'a) must throwAn[Exception]("""Expected field 'a' in '{"b":2}'""")
+          """[{"a": 1}, 12]""".extract[Int](* / 'a) must throwAn[Exception]("""Not a json object: 12""")
+        }
+        "nested if inner lens fails" in {
+          """[{"a": [{"c": 2}, {"b": 3}]}]""".extract[Int](* / 'a / * / 'b) must throwAn[RuntimeException]("""Expected field 'b' in '{"c":2}'""")
         }
         "if outer is no array" in {
           """{"a": 5}""".extract[Int]((* / "a")) must throwAn[Exception]("""Not a json array: {"a":5}""")
@@ -100,6 +107,13 @@ class JsonLensesSpec extends Specification with SpecHelpers {
         "if inner is no array" in {
           """[{}, {}]""".extract[Int]((* / *)) must throwAn[Exception]("""Not a json array: {}""")
           """{"a": 5}""".extract[Int](("a" / *)) must throwAn[Exception]("""Not a json array: 5""")
+        }
+        "with nested big array" in {
+          val entry = JsObject("key" -> JsString("123456789"), "doc_count" -> JsNumber(1))
+          val array = JsArray(Vector.fill(10000)(entry))
+
+          val lens = * / 'doc_count
+          array.extract[Long](lens) must be_==(Vector.fill(10000)(1))
         }
       }
 
