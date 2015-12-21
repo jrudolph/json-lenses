@@ -42,7 +42,7 @@ val json = """
       "price": 19.95
     }
   }
-}""".asJson
+}""".parseJson
 ```
 
 All authors in this document are addressed by
