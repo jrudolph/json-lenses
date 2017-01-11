@@ -8,7 +8,7 @@ licenses in GlobalScope += "Apache 2" -> url("http://www.apache.org/licenses/LIC
 
 (LsKeys.tags in LsKeys.lsync) := Seq("json", "spray", "lens", "json-path")
 
-(LsKeys.docsUrl in LsKeys.lsync) <<= homepage
+(LsKeys.docsUrl in LsKeys.lsync) := homepage.value
 
 (description in LsKeys.lsync) :=
   "json-lenses is a library to query and update JSON data."
