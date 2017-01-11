@@ -1,12 +1,14 @@
-scalaVersion := "2.11.4"
+scalaVersion := "2.12.1"
 
-resolvers += "spray" at "http://repo.spray.io"
+resolvers ++= Seq(
+  "spray" at "http://repo.spray.io",
+  Resolver.sonatypeRepo("public"))
 
 libraryDependencies ++=
   Seq(
-    "io.spray" %% "spray-json" % "1.3.2",
-    "org.parboiled" %% "parboiled-scala" % "1.1.6" % "compile",
-    "org.specs2" %% "specs2-core" % "3.6.4" % "test"
+    "io.spray" %% "spray-json" % "1.3.3",
+    "org.parboiled" %% "parboiled-scala" % "1.1.8" % "compile",
+    "org.specs2" %% "specs2-core" % "3.8.6" % "test"
   )
 
 initialCommands in console += """
@@ -16,4 +18,4 @@ initialCommands in console += """
     import JsonLenses._
 """
 
-crossScalaVersions := Seq("2.10.5", "2.11.7")
+crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
