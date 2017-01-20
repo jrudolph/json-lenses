@@ -1,0 +1,2 @@
+Version 0.6.2 adds support for Scala 2.12. Thanks, [@andrebeat](https://github.com/andrebeat) for
+the update.
