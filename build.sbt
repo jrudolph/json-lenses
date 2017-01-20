@@ -1,9 +1,5 @@
 scalaVersion := "2.12.1"
 
-resolvers ++= Seq(
-  "spray" at "http://repo.spray.io",
-  Resolver.sonatypeRepo("public"))
-
 libraryDependencies ++=
   Seq(
     "io.spray" %% "spray-json" % "1.3.3",
