@@ -48,7 +48,10 @@ trait Operations extends OptionalFieldOperations { _: ExtraImplicits ⇒
   }
 
   def append(update: Update): Operation = ???
-  def update(update: Update): Operation = ???
+  def update(update: Update): Operation = new MapOperation {
+    def apply(value: JsValue): SafeJsValue =
+      safe(update(value))
+  }
   def extract[M[_], T](value: Lens[M])(f: M[T] ⇒ Update): Operation = ???
 }
 
