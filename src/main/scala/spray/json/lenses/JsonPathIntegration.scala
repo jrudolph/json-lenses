@@ -46,7 +46,7 @@ trait JsonPathIntegration { self: ScalarLenses with SeqLenses with OptionLenses 
           f1(js).right.forall(_.forall(v1 => op.predicate(v1, v2)))
         }
 
-        case JsonPath.Exists(path) =>
+      case JsonPath.Exists(path) =>
         js => convertPath(path).retr(js).exists(_.nonEmpty)
     }
     def convertExpr(expr: JsonPath.Expr): JsValue => Validated[Seq[JsValue]] = expr match {
