@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.higherKinds
+
 /**
  * Defines a set of operations to update Json values.
  */

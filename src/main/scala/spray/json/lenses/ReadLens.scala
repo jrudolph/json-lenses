@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.higherKinds
+
 /**
  * The read lens can extract child values out of a JsValue hierarchy. A read lens
  * is parameterized with a type constructor. This allows to extracts not only scalar

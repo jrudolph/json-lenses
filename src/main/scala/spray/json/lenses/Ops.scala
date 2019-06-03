@@ -18,6 +18,7 @@ package spray.json.lenses
 
 import scala.annotation.tailrec
 import scala.collection.immutable.VectorBuilder
+import scala.language.higherKinds
 
 /**
  * A trait to define common operations for different container types.

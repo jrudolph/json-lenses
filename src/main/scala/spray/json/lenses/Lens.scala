@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.higherKinds
+
 /**
  * A Lens combines read and update functions of UpdateLens and ReadLens into
  * combinable chunks.

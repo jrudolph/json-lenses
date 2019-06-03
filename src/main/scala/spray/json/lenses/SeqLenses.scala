@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.higherKinds
+
 trait SeqLenses {
   /**
    * The lens which just converts another Lens into one of a

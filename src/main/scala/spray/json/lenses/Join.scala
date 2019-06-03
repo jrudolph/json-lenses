@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.higherKinds
+
 /**
  * This typeclass with its implicit instances decides how two containers should be joined.
  *

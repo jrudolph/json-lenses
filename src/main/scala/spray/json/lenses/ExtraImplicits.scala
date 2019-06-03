@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.{ higherKinds, implicitConversions }
+
 trait ExtraImplicits {
   trait RichJsValue {
     def value: JsValue
