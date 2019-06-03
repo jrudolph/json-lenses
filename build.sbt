@@ -1,4 +1,4 @@
-scalaVersion := "2.12.1"
+scalaVersion := "2.12.8"
 
 libraryDependencies ++=
   Seq(
@@ -14,4 +14,4 @@ initialCommands in console += """
     import JsonLenses._
 """
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
+crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8")
