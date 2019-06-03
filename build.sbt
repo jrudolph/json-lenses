@@ -2,9 +2,12 @@ scalaVersion := "2.12.8"
 
 libraryDependencies ++=
   Seq(
-    "io.spray" %% "spray-json" % "1.3.3",
-    "org.parboiled" %% "parboiled-scala" % "1.1.8" % "compile",
-    "org.specs2" %% "specs2-core" % "3.8.6" % "test"
+    "io.spray" %% "spray-json" % "1.3.5",
+    "org.parboiled" %% "parboiled-scala" % "1.3.0" % Compile,
+    if (scalaVersion.value.startsWith("2.10"))
+      "org.specs2" %% "specs2-core" % "3.10.0" % Test
+    else
+      "org.specs2" %% "specs2-core" % "4.5.1" % Test
   )
 
 initialCommands in console += """
@@ -15,3 +18,5 @@ initialCommands in console += """
 """
 
 crossScalaVersions := Seq("2.10.7", "2.11.12", "2.12.8")
+
+scalacOptions ++= Seq("-deprecation", "-feature")
