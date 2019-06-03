@@ -22,18 +22,18 @@ trait ScalarLenses {
    * Accesses a field of a JsObject.
    */
   def field(name: String): ScalarLens = new LensImpl[Id] {
-    def updated(f: SafeJsValue ⇒ SafeJsValue)(parent: JsValue): SafeJsValue =
-      for (updatedValue ← f(retr(parent)))
+    def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue =
+      for (updatedValue <- f(retr(parent)))
         // asJsObject is already guarded by getField above, FIXME: is it really?
         yield JsObject(fields = parent.asJsObject.fields + (name -> updatedValue))
 
-    def retr: JsValue ⇒ SafeJsValue = v ⇒ asObj(v) flatMap {
+    def retr: JsValue => SafeJsValue = v => asObj(v) flatMap {
       _.fields.get(name).getOrError("Expected field '%s' in '%s'" format (name, v))
     }
 
     def asObj(v: JsValue): Validated[JsObject] = v match {
-      case o: JsObject ⇒ Right(o)
-      case e @ _       ⇒ unexpected("Not a json object: " + e)
+      case o: JsObject => Right(o)
+      case e @ _       => unexpected("Not a json object: " + e)
     }
   }
 
@@ -41,24 +41,24 @@ trait ScalarLenses {
    * Accesses an element of a JsArray.
    */
   def element(idx: Int): ScalarLens = new LensImpl[Id] {
-    def updated(f: SafeJsValue ⇒ SafeJsValue)(parent: JsValue): SafeJsValue = parent match {
-      case JsArray(elements) ⇒
+    def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue = parent match {
+      case JsArray(elements) =>
         if (idx < elements.size) {
           val (headEls, element +: tail) = elements.splitAt(idx)
-          f(Right(element)) map (v ⇒ JsArray(headEls ++ (v +: tail)))
+          f(Right(element)) map (v => JsArray(headEls ++ (v +: tail)))
         } else
           unexpected("Too little elements in array: %s size: %d index: %d" format (parent, elements.size, idx))
-      case e @ _ ⇒
+      case e @ _ =>
         unexpected("Not a json array: " + e)
     }
 
-    def retr: JsValue ⇒ SafeJsValue = {
-      case a @ JsArray(elements) ⇒
+    def retr: JsValue => SafeJsValue = {
+      case a @ JsArray(elements) =>
         if (idx < elements.size)
           Right(elements(idx))
         else
           outOfBounds("Too little elements in array: %s size: %d index: %d" format (a, elements.size, idx))
-      case e @ _ ⇒ unexpected("Not a json array: " + e)
+      case e @ _ => unexpected("Not a json array: " + e)
     }
   }
 
@@ -66,10 +66,10 @@ trait ScalarLenses {
    * The identity lens which operates on the current element itself
    */
   val value: ScalarLens = new LensImpl[Id] {
-    def updated(f: SafeJsValue ⇒ SafeJsValue)(parent: JsValue): SafeJsValue =
+    def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue =
       f(Right(parent))
 
-    def retr: JsValue ⇒ SafeJsValue = x ⇒ Right(x)
+    def retr: JsValue => SafeJsValue = x => Right(x)
   }
 
   /**
@@ -77,12 +77,12 @@ trait ScalarLenses {
    * a singleton JsArray with that value as single element.
    */
   val arrayOrSingletonAsArray: ScalarLens = new LensImpl[Id] {
-    def updated(f: SafeJsValue ⇒ SafeJsValue)(parent: JsValue): SafeJsValue =
-      retr(parent).flatMap(x ⇒ f(Right(x)))
+    def updated(f: SafeJsValue => SafeJsValue)(parent: JsValue): SafeJsValue =
+      retr(parent).flatMap(x => f(Right(x)))
 
-    def retr: JsValue ⇒ Validated[JsValue] = {
-      case ar: JsArray ⇒ Right(ar)
-      case x           ⇒ Right(JsArray(x))
+    def retr: JsValue => Validated[JsValue] = {
+      case ar: JsArray => Right(ar)
+      case x           => Right(JsArray(x))
     }
   }
 }

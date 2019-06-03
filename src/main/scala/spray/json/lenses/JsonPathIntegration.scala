@@ -17,7 +17,7 @@
 package spray.json
 package lenses
 
-trait JsonPathIntegration { self: ScalarLenses with SeqLenses with OptionLenses ⇒
+trait JsonPathIntegration { self: ScalarLenses with SeqLenses with OptionLenses =>
   /**
    * Create a Lens from a json-path expression.
    */
@@ -26,35 +26,35 @@ trait JsonPathIntegration { self: ScalarLenses with SeqLenses with OptionLenses 
 
   def fromPath(ast: JsonPath.Path): Lens[Seq] = {
     def convertPath(path: JsonPath.Path): Lens[Seq] = path match {
-      case JsonPath.Root                   ⇒ value.toSeq
-      case JsonPath.Selection(inner, proj) ⇒ convertPath(inner) / convertLens(proj)
+      case JsonPath.Root                   => value.toSeq
+      case JsonPath.Selection(inner, proj) => convertPath(inner) / convertLens(proj)
     }
     def convertLens(proj: JsonPath.Projection): Lens[Seq] =
       proj match {
-        case JsonPath.ByField(name)     ⇒ optionalField(name).toSeq
-        case JsonPath.ByIndex(i)        ⇒ element(i).toSeq
-        case JsonPath.AllElements       ⇒ elements
-        case JsonPath.ByPredicate(pred) ⇒ filter(convertPredicate(pred))
+        case JsonPath.ByField(name)     => optionalField(name).toSeq
+        case JsonPath.ByIndex(i)        => element(i).toSeq
+        case JsonPath.AllElements       => elements
+        case JsonPath.ByPredicate(pred) => filter(convertPredicate(pred))
       }
     def convertPredicate(pred: JsonPath.Predicate): JsPred = pred match {
-      case op: JsonPath.BinOpPredicate ⇒
+      case op: JsonPath.BinOpPredicate =>
         val f1 = convertExpr(op.expr1)
         val f2 = convertSimpleExpr(op.expr2)
 
-        js ⇒ {
+        js => {
           val v2 = f2(js)
-          f1(js).right.forall(_.forall(v1 ⇒ op.predicate(v1, v2)))
+          f1(js).right.forall(_.forall(v1 => op.predicate(v1, v2)))
         }
 
-        case JsonPath.Exists(path) ⇒
-        js ⇒ convertPath(path).retr(js).exists(_.nonEmpty)
+        case JsonPath.Exists(path) =>
+        js => convertPath(path).retr(js).exists(_.nonEmpty)
     }
-    def convertExpr(expr: JsonPath.Expr): JsValue ⇒ Validated[Seq[JsValue]] = expr match {
-      case JsonPath.PathExpr(path) ⇒ js ⇒ convertPath(path).retr(js)
-      case simple: JsonPath.SimpleExpr ⇒ js ⇒ Right(Seq(convertSimpleExpr(simple)(js)))
+    def convertExpr(expr: JsonPath.Expr): JsValue => Validated[Seq[JsValue]] = expr match {
+      case JsonPath.PathExpr(path) => js => convertPath(path).retr(js)
+      case simple: JsonPath.SimpleExpr => js => Right(Seq(convertSimpleExpr(simple)(js)))
     }
-    def convertSimpleExpr(expr: JsonPath.SimpleExpr): JsValue ⇒ JsValue = expr match {
-      case JsonPath.Constant(x) ⇒ _ ⇒ x
+    def convertSimpleExpr(expr: JsonPath.SimpleExpr): JsValue => JsValue = expr match {
+      case JsonPath.Constant(x) => _ => x
     }
 
     convertPath(ast)
