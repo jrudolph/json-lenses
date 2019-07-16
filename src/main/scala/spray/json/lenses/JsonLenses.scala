@@ -17,6 +17,8 @@
 package spray.json
 package lenses
 
+import scala.language.{ higherKinds, implicitConversions }
+
 /**
  * An aggregate option to import all of the functionality of JsonLenses with one
  * import.

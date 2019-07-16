@@ -19,7 +19,6 @@ package lenses
 
 import org.specs2.mutable.Specification
 import spray.json.JsonParser
-
 import scala.reflect.ClassTag
 
 trait SpecHelpers {
