@@ -1,10 +1,8 @@
-scalaVersion := "2.12.1"
-
 libraryDependencies ++=
   Seq(
-    "io.spray" %% "spray-json" % "1.3.3",
-    "org.parboiled" %% "parboiled-scala" % "1.1.8" % "compile",
-    "org.specs2" %% "specs2-core" % "3.8.6" % "test"
+    "io.spray" %% "spray-json" % "1.3.5",
+    "org.parboiled" %% "parboiled-scala" % "1.3.1" % "compile",
+    "org.specs2" %% "specs2-core" % "4.6.0" % "test"
   )
 
 initialCommands in console += """
@@ -14,4 +12,4 @@ initialCommands in console += """
     import JsonLenses._
 """
 
-crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
+crossScalaVersions := Seq("2.13.0", "2.12.8", "2.11.12")
