@@ -21,6 +21,8 @@ import org.specs2.mutable.Specification
 import scala.reflect.ClassTag
 import spray.json.JsonParser
 
+import scala.reflect.ClassTag
+
 trait SpecHelpers {
   self: Specification =>
 

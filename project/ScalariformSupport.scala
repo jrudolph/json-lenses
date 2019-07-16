@@ -12,7 +12,8 @@ object ScalariformSupport {
   import scalariform.formatter.preferences._
   def formattingPreferences =
     FormattingPreferences()
-      .setPreference(RewriteArrowSymbols, false)
+      .setPreference(UseUnicodeArrows, false)
+      .setPreference(RewriteArrowSymbols, true)
       .setPreference(AlignParameters, true)
       .setPreference(AlignSingleLineCaseStatements, true)
       .setPreference(DoubleIndentConstructorArguments, true)
