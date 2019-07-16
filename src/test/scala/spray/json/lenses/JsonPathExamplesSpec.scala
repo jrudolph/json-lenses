@@ -90,7 +90,7 @@ class JsonPathExamplesSpec extends Specification with SpecHelpers {
         json.extract[String](("store" / "book" / filter("price".is[Double](_ >= 10)) / "title")) must be_==(Seq("Sword of Honour"))
       }
       "All books that have isbn" in {
-        json.extract[String](("store" / "book" / filter("isbn".is[JsValue](_ ⇒ true)) / "title")) must be_==(Seq("Sword of Honour"))
+        json.extract[String](("store" / "book" / filter("isbn".is[JsValue](_ => true)) / "title")) must be_==(Seq("Sword of Honour"))
       }
       "Isbn of books that have isbn" in {
         json.extract[String](("store" / "book" / * / "isbn".?)) must be_==(Seq("0-553-21311-3"))

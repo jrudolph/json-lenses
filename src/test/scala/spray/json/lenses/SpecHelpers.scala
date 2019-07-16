@@ -23,7 +23,7 @@ import spray.json.JsonParser
 import scala.reflect.ClassTag
 
 trait SpecHelpers {
-  self: Specification ⇒
+  self: Specification =>
 
   import JsonLenses._
 
@@ -35,7 +35,7 @@ trait SpecHelpers {
   override def throwA[E <: Throwable](message: String = ".*")(implicit m: ClassTag[E]): Matcher[Any] = {
     import java.util.regex.Pattern
     throwA(m).like {
-      case e ⇒ createExpectable(e.getMessage).applyMatcher(new BeMatching(".*" + Pattern.quote(message) + ".*"))
+      case e => createExpectable(e.getMessage).applyMatcher(new BeMatching(".*" + Pattern.quote(message) + ".*"))
     }
   }
 }
