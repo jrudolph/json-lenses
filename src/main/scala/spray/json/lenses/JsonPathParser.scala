@@ -57,7 +57,9 @@ object JsonPathParser extends Parser with BasicRules {
     Digits ~> (d => JsonPath.ByIndex(d.toInt)) |
       SingleQuotedString ~~> JsonPath.ByField |
       AllElements |
-      "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByPredicate
+      "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByPredicate |
+      "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ "&&" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByAddPredicate |
+      "?(" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ "||" ~ WhiteSpace ~ Predicate ~ WhiteSpace ~ ")" ~~> JsonPath.ByOrPredicate
   }
 
   def Predicate: Rule1[JsonPath.Predicate] = rule {

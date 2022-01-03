@@ -31,6 +31,8 @@ object JsonPath {
   case class ByField(name: String) extends Projection
   case class ByIndex(idx: Int) extends Projection
   case class ByPredicate(expr: Predicate) extends Projection
+  case class ByAddPredicate(pred1: Predicate, pred2: Predicate) extends Projection
+  case class ByOrPredicate(pred1: Predicate, pred2: Predicate) extends Projection
 
   sealed trait Predicate
   sealed trait BinOpPredicate extends Predicate {
