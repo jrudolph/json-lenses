@@ -35,6 +35,18 @@ trait JsonPathIntegration { self: ScalarLenses with SeqLenses with OptionLenses 
         case JsonPath.ByIndex(i)        => element(i).toSeq
         case JsonPath.AllElements       => elements
         case JsonPath.ByPredicate(pred) => filter(convertPredicate(pred))
+        case JsonPath.ByAddPredicate(pred1, pred2) =>
+          val f1: JsValue => Boolean = convertPredicate(pred1)
+          val f2: JsValue => Boolean = convertPredicate(pred2)
+          filter((js: JsValue) => {
+            f1(js) && f2(js)
+          })
+        case JsonPath.ByOrPredicate(pred1, pred2) =>
+          val f1: JsValue => Boolean = convertPredicate(pred1)
+          val f2: JsValue => Boolean = convertPredicate(pred2)
+          filter((js: JsValue) => {
+            f1(js) || f2(js)
+          })
       }
     def convertPredicate(pred: JsonPath.Predicate): JsPred = pred match {
       case op: JsonPath.BinOpPredicate =>

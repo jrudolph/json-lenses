@@ -99,7 +99,6 @@ class JsonPathExamplesSpec extends Specification with SpecHelpers {
     }
     "With Json-Path syntax" in {
       import JsonLenses.fromPath
-
       "All authors" in {
         json.extract[String](fromPath("$.store.book[*].author")) must be_==(Seq("Nigel Rees", "Evelyn Waugh"))
       }
@@ -111,6 +110,18 @@ class JsonPathExamplesSpec extends Specification with SpecHelpers {
       }
       "Books that cost more than 10 USD" in {
         json.extract[String](fromPath("$.store.book[?(@.price > 10)].title")) must be_==(Seq("Sword of Honour"))
+      }
+      "Books that cost more than 10 USD and with category as fiction" in {
+        json.extract[String](fromPath("$.store.book[?(@.price > 10 && @.category == 'fiction')].title")) must be_==(Seq("Sword of Honour"))
+      }
+      "Books that cost more than 100 USD and with category as fiction" in {
+        json.extract[String](fromPath("$.store.book[?(@.price > 100 && @.category == 'fiction')].title")) must be_==(Seq())
+      }
+      "Books that cost more than 10 USD or category reference" in {
+        json.extract[String](fromPath("$.store.book[?(@.price > 10 || @.category == 'reference')].title")) must be_==(Seq("Sayings of the Century", "Sword of Honour"))
+      }
+      "Books that cost more than 10 USD or category reference" in {
+        json.extract[String](fromPath("$.store.book[?(@.price < 1 || @.category == 'unknown-category')].title")) must be_==(Seq())
       }
       "All books that have isbn" in {
         json.extract[String](fromPath("$.store.book[?(@.isbn)].title")) must be_==(Seq("Sword of Honour"))
